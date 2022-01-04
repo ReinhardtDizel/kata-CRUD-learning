@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div style="border: 1px solid #ccc;padding:5px;margin-bottom:20px;">
+    <a th:href="@{/}">Back</a>
+</div>
+<div>
+    <form th:action="@{/editUser/{params}}" method="post" th:object="${userDto}">
+
+        <tr>
+            <td>
+                <label>
+                    <input type="hidden" th:field="*{id}">
+                </label>
+            </td>
+            <td>
+                <label>
+                    <input type="text" th:field="*{name}">
+                </label>
+            </td>
+            <td>
+                <label>
+                    <input type="text" th:field="*{email}">
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="edit"/>
+            </td>
+        </tr>
+    </form>
+</div>
+</body>
+</html>
