@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../styles/main.css" th:href="@{/styles/main.css}" rel="stylesheet"/>
+    <title></title>
+</head>
+<body>
+<h1>Login page</h1>
+<div class="login-container">
+    <form class="login-container-form" method="post" action="/login">
+        <label for="username">Username</label>:
+        <input id="username" type="text" name="j_username"/>
+        <label for="password">Password</label>:
+        <input id="password" type="password" name="j_password"/>
+        <input type="submit"/>
+    </form>
+</div>
+</body>
+</html>

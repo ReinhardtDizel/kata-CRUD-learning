@@ -1,11 +1,12 @@
 package kata.academy.dao;
 
-import kata.academy.dto.UserDto;
 import kata.academy.model.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,10 +17,22 @@ public class UserDaoMySql implements UserDao {
     private EntityManager em;
 
     @Override
-    public Optional<User> updateUser(UserDto userDto) {
-        User updated = em.find(User.class, userDto.id);
-        updated.setName(userDto.getName());
-        updated.setEmail(userDto.getEmail());
+    public User findUserByUserName(String s) {
+        Query query = em.createQuery("select user from User user where user.email =:param");
+        query.setParameter("param", s);
+        User exist = null;
+        try {
+            exist = (User) query.getSingleResult();
+        } catch (NoResultException ignored) {
+        }
+        return exist;
+    }
+
+    @Override
+    public Optional<User> updateUser(long id, User user) {
+        User updated = em.find(User.class, id);
+        updated.setName(user.getName());
+        updated.setEmail(user.getEmail());
         em.merge(updated);
         return Optional.empty();
     }
@@ -38,7 +51,9 @@ public class UserDaoMySql implements UserDao {
     @Override
     public void saveUser(User user) {
         try {
-            em.persist(user);
+            if (!em.contains(user)) {
+                em.persist(user);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

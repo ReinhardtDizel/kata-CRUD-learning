@@ -1,14 +1,16 @@
 package kata.academy.service;
 
-import kata.academy.dto.UserDto;
 import kata.academy.model.User;
 
 import java.util.List;
 
 public interface UserService {
-    void updateUser(UserDto userDto);
+
+    void updateUser(long id, User user);
 
     User getById(long id);
+
+    User findUserByUserName(String s);
 
     List<User> getAll();
 

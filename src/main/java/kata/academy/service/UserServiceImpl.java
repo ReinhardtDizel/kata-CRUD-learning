@@ -1,18 +1,20 @@
 package kata.academy.service;
 
 import kata.academy.dao.UserDao;
-import kata.academy.dto.UserDto;
 import kata.academy.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.crypto.spec.OAEPParameterSpec;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private UserDao userDao;
 
@@ -23,13 +25,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(UserDto userDto) {
-        userDao.updateUser(userDto);
+    public void updateUser(long id, User user) {
+        userDao.updateUser(id, user);
     }
 
     @Override
     public User getById(long id) {
-        return userDao.getById(id).get();
+        Optional<User> optionalUser = userDao.getById(id);
+        return optionalUser.orElse(null);
+    }
+
+    @Override
+    public User findUserByUserName(String s) {
+        return userDao.findUserByUserName(s);
     }
 
     @Override
@@ -40,6 +48,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void saveUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.saveUser(user);
     }
 
