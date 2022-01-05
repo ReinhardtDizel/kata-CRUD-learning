@@ -6,9 +6,12 @@ import kata.academy.model.User;
 import java.util.List;
 
 public interface UserService {
+
     void updateUser(UserDto userDto);
 
     User getById(long id);
+
+    User findUserByUserName(String s);
 
     List<User> getAll();
 

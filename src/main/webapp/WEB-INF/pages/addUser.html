@@ -7,10 +7,10 @@
     </head>
 <body>
 <div style="border: 1px solid #ccc;padding:5px;margin-bottom:20px;">
-    <a th:href="@{/}">Back</a>
+    <a th:href="@{/admin}">Back</a>
 </div>
 <div>
-    <form th:action="@{/addUser}" method="post" th:object="${userDto}">
+    <form th:action="@{/admin/addUser}" method="post" th:object="${userDto}">
 
         <tr>
             <td>
