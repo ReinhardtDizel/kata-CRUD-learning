@@ -1,6 +1,5 @@
 package kata.academy.dao;
 
-import kata.academy.dto.UserDto;
 import kata.academy.model.User;
 
 import java.util.List;
@@ -10,7 +9,7 @@ public interface UserDao {
 
     User findUserByUserName(String s);
 
-    Optional<User> updateUser(UserDto userDto);
+    Optional<User> updateUser(long id, User user);
 
     Optional<User> getById(long id);
 

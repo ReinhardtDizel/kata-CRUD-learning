@@ -1,22 +1,36 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../styles/index.css" th:href="@{/styles/index.css}" rel="stylesheet"/>
     <title></title>
 </head>
-<style>
-    table, th, td {
-        border: 1px solid black;
-        padding: 5px;
-    }
-
-    .message {
-        color: blue;
-    }
-</style>
 <body>
 <div>
-    <table style="width:100%">
+    <div class="topnav">
+        <a class="active" th:href="@{/}">Home</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">Admin Panel</a>
+        <div class="login-panel-container">
+            <div sec:authorize="true">
+                <form class="login-panel-form" action="/logout">
+                    <button type="submit">Log Out</button>
+                </form>
+            </div>
+            <div sec:authorize="false">
+                <form class="login-panel-form" action="/login">
+                    <input type="text" placeholder="Username" name="username">
+                    <input type="text" placeholder="Password" name="psw">
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <table class="user-table">
         <tr>
             <th>name</th>
             <th>email</th>

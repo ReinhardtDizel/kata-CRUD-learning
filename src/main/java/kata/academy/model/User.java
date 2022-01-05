@@ -1,9 +1,7 @@
 package kata.academy.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(schema = "test", name = "user")
@@ -48,23 +46,15 @@ public class User {
         this.roles.add(roles);
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public User(String name, String email, String password, Set<Role> roles) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        active = 1;
+        this.roles.addAll(roles);
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public Integer getActive() {
-        return active;
-    }
-
-    public void setActive(Integer active) {
-        this.active = active;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -92,28 +82,44 @@ public class User {
         this.password = password;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
-        return id.equals(user.id) && email.equals(user.email) && password.equals(user.password);
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email, password);
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Integer getActive() {
+        return active;
+    }
+
+    public void setActive(Integer active) {
+        this.active = active;
     }
 
     @Override
     public String toString() {
-        return "User{" +
-                "roles=" + roles +
-                ", id=" + id +
+        return "UserAbstract{" +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", active=" + active +
+                ", roles=" + roles +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User that = (User) o;
+        return id.equals(that.id) && name.equals(that.name) && email.equals(that.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, email);
     }
 }

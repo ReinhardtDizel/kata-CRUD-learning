@@ -1,6 +1,5 @@
 package kata.academy.dao;
 
-import kata.academy.dto.UserDto;
 import kata.academy.model.User;
 import org.springframework.stereotype.Repository;
 
@@ -30,10 +29,10 @@ public class UserDaoMySql implements UserDao {
     }
 
     @Override
-    public Optional<User> updateUser(UserDto userDto) {
-        User updated = em.find(User.class, userDto.id);
-        updated.setName(userDto.getName());
-        updated.setEmail(userDto.getEmail());
+    public Optional<User> updateUser(long id, User user) {
+        User updated = em.find(User.class, id);
+        updated.setName(user.getName());
+        updated.setEmail(user.getEmail());
         em.merge(updated);
         return Optional.empty();
     }

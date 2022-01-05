@@ -1,8 +1,7 @@
-package kata.academy.service;
+package kata.academy.security;
 
-import kata.academy.dao.UserDao;
 import kata.academy.model.User;
-import kata.academy.model.UserSecurity;
+import kata.academy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

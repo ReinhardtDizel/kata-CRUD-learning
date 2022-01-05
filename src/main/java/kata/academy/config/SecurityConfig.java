@@ -2,7 +2,7 @@ package kata.academy.config;
 
 import kata.academy.config.handler.LoginSuccessHandler;
 import kata.academy.config.init.DbInit;
-import kata.academy.service.UserSecurityDetailsService;
+import kata.academy.security.UserSecurityDetailsService;
 import kata.academy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +12,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -66,6 +67,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         daoAuthenticationProvider.setUserDetailsService(securityDetailsService);
         return daoAuthenticationProvider;
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .antMatchers("/scripts/**")
+                .antMatchers("/styles/**")
+                .antMatchers("/images/**")
+                .antMatchers("/fonts/**");
     }
 
     @Override

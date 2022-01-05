@@ -1,5 +1,6 @@
 package kata.academy.controller;
 
+import kata.academy.dto.Mapper;
 import kata.academy.dto.UserDto;
 import kata.academy.model.User;
 import kata.academy.model.UserPermissions;
@@ -16,11 +17,18 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
 
     private UserService userService;
+    private Mapper mapper;
+
+    @Autowired
+    public void setMapper(Mapper mapper) {
+        this.mapper = mapper;
+    }
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -36,7 +44,7 @@ public class UserController {
     public String printWelcome(Model model) {
         List<User> users = new ArrayList<>();
         userService.getAll().stream().filter(user -> user.getRoles().stream().noneMatch(
-                role -> role.getAuthority().equals(UserPermissions.ADMIN.getValue())))
+                        role -> role.getAuthority().equals(UserPermissions.ADMIN.getValue())))
                 .forEach(users::add);
         model.addAttribute("users", users);
         return "index";
@@ -44,7 +52,10 @@ public class UserController {
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String printAdmin(Model model) {
-        List<User> users = new ArrayList<>(userService.getAll());
+        List<UserDto> users = userService.getAll()
+                .stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
         model.addAttribute("users", users);
         return "admin";
     }
@@ -56,7 +67,7 @@ public class UserController {
         if (request.equals("delete")) {
             userService.deleteUser(id);
         } else if (request.equals("edit")) {
-            return new ModelAndView(new RedirectView("editUser=" + id, true));
+            return new ModelAndView(new RedirectView("editUser/" + id, true));
         }
         return new ModelAndView(new RedirectView("/admin", true));
     }
@@ -79,16 +90,17 @@ public class UserController {
     @RequestMapping(value = "/admin/editUser/{id}", method = RequestMethod.GET)
     public String printEditedUser(Model model,
                                   @PathVariable Long id) {
-        User user = userService.getById(id);
-        //UserDto userDto = new UserDto(user.getId(), user.getName(), user.getEmail());
-        //model.addAttribute("userDto", userDto);
+
+        UserDto userDto = mapper.toDto(userService.getById(id));
+        model.addAttribute("userDto", userDto);
+        model.addAttribute("roles", userDto.roleString());
         return "editUser";
     }
 
     @RequestMapping(value = "/admin/editUser", method = RequestMethod.POST)
     public String editedUser(Model model,
                              @ModelAttribute("userDto") UserDto userDto) {
-        userService.updateUser(userDto);
+        //userService.updateUser(userDto.getId(),userDto);
         model.addAttribute("userDto", userDto);
         return "editUser";
     }

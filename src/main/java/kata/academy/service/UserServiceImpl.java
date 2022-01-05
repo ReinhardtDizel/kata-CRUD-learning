@@ -1,7 +1,6 @@
 package kata.academy.service;
 
 import kata.academy.dao.UserDao;
-import kata.academy.dto.UserDto;
 import kata.academy.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,8 +25,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(UserDto userDto) {
-        userDao.updateUser(userDto);
+    public void updateUser(long id, User user) {
+        userDao.updateUser(id, user);
     }
 
     @Override
