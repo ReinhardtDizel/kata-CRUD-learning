@@ -3,8 +3,7 @@ package kata.academy.model;
 public enum UserPermissions {
     ADMIN("ROLE_ADMIN"),
     MANAGER("ROLE_MANAGER"),
-    USER("ROLE_USER"),
-    ANONYMOUS("ROLE_ANONYMOUS");
+    USER("ROLE_USER");
 
     private final String value;
 

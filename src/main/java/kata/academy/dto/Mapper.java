@@ -25,6 +25,14 @@ public class Mapper {
         return new UserDto(id, name, email, password, roles);
     }
 
+    public UserDto toSimpleDto(User user) {
+        return new UserDto(user.getName(), user.getEmail(), user.getPassword());
+    }
+
+    public User toSimpleUser(UserDto userDto) {
+        return new User(userDto.getName(), userDto.getEmail(), userDto.getPassword());
+    }
+
     public User toUser(UserDto userDto) {
 
         return new User(userDto.getName(),
