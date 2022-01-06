@@ -1,5 +1,6 @@
 package kata.academy.config;
 
+import kata.academy.config.handler.CustomAuthenticationFailureHandler;
 import kata.academy.config.handler.LoginSuccessHandler;
 import kata.academy.config.init.DbInit;
 import kata.academy.security.UserSecurityDetailsService;
@@ -75,7 +76,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/scripts/**")
                 .antMatchers("/styles/**")
                 .antMatchers("/images/**")
-                .antMatchers("/fonts/**");
+                .antMatchers("/fonts/**")
+                .antMatchers("/signup");
     }
 
     @Override
@@ -86,6 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 //указываем логику обработки при логине
                 .successHandler(new LoginSuccessHandler())
+                .failureHandler(new CustomAuthenticationFailureHandler())
                 // указываем action с формы логина
                 .loginProcessingUrl("/login")
                 // Указываем параметры логина и пароля с формы логина
@@ -100,13 +103,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // указываем URL логаута
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 // указываем URL при удачном логауте
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/?logout")
                 //выклчаем кроссдоменную секьюрность (на этапе обучения неважна)
                 .and().csrf().disable();
 
         http
                 // делаем страницу регистрации недоступной для авторизированных пользователей
                 .authorizeRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers("/signup").anonymous()
                 //страницы аутентификаци доступна всем
                 .antMatchers("/login").anonymous()
                 // защищенные URL

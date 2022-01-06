@@ -19,6 +19,19 @@ public class UserDto {
         this.roles = roles;
     }
 
+    public UserDto(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public UserDto(String name, String email, String password, List<String> roles) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -71,6 +84,12 @@ public class UserDto {
 
     @Override
     public String toString() {
-        return id + " name: " + name + " emil: " + email + " role: " + roleString();
+        return "UserDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

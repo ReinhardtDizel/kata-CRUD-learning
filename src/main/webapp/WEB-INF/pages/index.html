@@ -14,23 +14,21 @@
         <a class="active" th:href="@{/}">Home</a>
         <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">Admin Panel</a>
         <div class="login-panel-container">
-            <div sec:authorize="true">
+            <div sec:authorize="not hasRole('ROLE_ANONYMOUS')">
                 <form class="login-panel-form" action="/logout">
-                    <button type="submit">Log Out</button>
+                    <button type="submit">Log out</button>
                 </form>
             </div>
-            <div sec:authorize="false">
+            <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
                 <form class="login-panel-form" action="/login">
-                    <input type="text" placeholder="Username" name="username">
-                    <input type="text" placeholder="Password" name="psw">
-                    <button type="submit">Login</button>
+                    <button type="submit">Sign In</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 <div class="container">
-    <table class="user-table">
+    <table class="user-table" sec:authorize="not hasRole('ROLE_ANONYMOUS')">
         <tr>
             <th>name</th>
             <th>email</th>
@@ -40,6 +38,17 @@
             <td th:text="${user.getEmail()}"></td>
         </tr>
     </table>
+    <table class="user-table" sec:authorize="hasRole('ROLE_ANONYMOUS')">
+        <h1>Hello</h1>
+        <p>Sign In or Sign Up for enjoy.</p>
+        <hr>
+    </table>
 </div>
+<canvas id="smile" width="200" height="200">
+    <p>Ваш браузер не поддерживает рисование.</p>
+</canvas>
+<script>
+
+</script>
 </body>
 </html>

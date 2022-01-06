@@ -1,12 +1,10 @@
 package kata.academy.dao;
 
 import kata.academy.model.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,12 +27,16 @@ public class UserDaoMySql implements UserDao {
     }
 
     @Override
-    public Optional<User> updateUser(long id, User user) {
-        User updated = em.find(User.class, id);
-        updated.setName(user.getName());
-        updated.setEmail(user.getEmail());
-        em.merge(updated);
-        return Optional.empty();
+    public void updateUser(long id, User user) {
+        try {
+            User updated = em.find(User.class, id);
+            updated.setName(user.getName());
+            updated.setEmail(user.getEmail());
+            updated.setRoles(user.getRoles());
+            em.merge(updated);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -52,7 +54,11 @@ public class UserDaoMySql implements UserDao {
     public void saveUser(User user) {
         try {
             if (!em.contains(user)) {
-                em.persist(user);
+                if (findUserByUserName(user.getEmail()) == null) {
+                    em.persist(user);
+                } else {
+                    throw new EntityExistsException();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

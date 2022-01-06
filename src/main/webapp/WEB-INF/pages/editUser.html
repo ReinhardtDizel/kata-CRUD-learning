@@ -5,6 +5,7 @@
       lang="en">
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../styles/adduser.css" th:href="@{/styles/adduser.css}" rel="stylesheet"/>
     <link href="../styles/index.css" th:href="@{/styles/index.css}" rel="stylesheet"/>
     <title></title>
 </head>
@@ -15,16 +16,14 @@
         <a class="active" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">Admin Panel</a>
         <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/addUser}">Add User</a>
         <div class="login-panel-container">
-            <div sec:authorize="true">
+            <div sec:authorize="not hasRole('ROLE_ANONYMOUS')">
                 <form class="login-panel-form" action="/logout">
-                    <button type="submit">Log Out</button>
+                    <button type="submit">Log out</button>
                 </form>
             </div>
-            <div sec:authorize="false">
+            <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
                 <form class="login-panel-form" action="/login">
-                    <input type="text" placeholder="Username" name="username">
-                    <input type="text" placeholder="Password" name="psw">
-                    <button type="submit">Login</button>
+                    <button type="submit">Sign In</button>
                 </form>
             </div>
         </div>
@@ -32,48 +31,67 @@
 </div>
 <div class="container">
     <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{/admin/editUser}" method="post" th:object="${userDto}">
-        <table style="width:100%">
-            <tr>
-                <td>
-                    <label>
-                        <input type="hidden" th:field="*{id}">
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        <input type="text" th:field="*{name}">
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        <input type="text" th:field="*{email}">
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        <input type="text" th:field="*{password}">
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        <input type="text" th:field="*{roles}">
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button class="btn success">Update</button>
-                </td>
-            </tr>
-        </table>
+        <h2>Edit User Form</h2>
+        <div class="row">
+            <div class="col-25">
+                <label for="id"></label>
+            </div>
+            <div class="col-75">
+                <input id="id" name="id" type="hidden" th:field="*{id}">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-25">
+                <label for="name">User Name</label>
+            </div>
+            <div class="col-75">
+                <input required type="text" id="name" name="name" placeholder="Name.." th:field="*{name}">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-25">
+                <label for="email">User Email</label>
+            </div>
+            <div class="col-75">
+                <input required type="text" id="email" name="email" placeholder="Email.." th:field="*{email}">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-25">
+                <label for="ps">User Password</label>
+            </div>
+            <div class="col-75">
+                <input required type="password" id="ps" placeholder="Password.." th:field="*{password}">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-25">
+                <label>Roles:</label>
+            </div>
+            <div class="col-75">
+                <th:block th:each="role: ${permissions}">
+                    <input type="checkbox" th:field="*{roles}"
+                           th:text="${role}" th:value="${role}" class="m-2"/>
+                </th:block>
+                <th:block th:each="role: ${permissionsToAdd}">
+                    <input type="checkbox" th:field="*{roles}"
+                           th:text="${role}" th:value="${role}" class="m-2"/>
+                </th:block>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-25">
+            </div>
+        </div>
+
+        <div class="row">
+            <input type="submit" value="Submit">
+        </div>
     </form>
 </div>
 </body>

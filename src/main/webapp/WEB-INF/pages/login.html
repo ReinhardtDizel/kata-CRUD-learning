@@ -11,12 +11,21 @@
 <body>
 <h1>Login page</h1>
 <div class="login-container">
-    <form class="login-container-form" method="post" action="/login">
+
+    <form class="login-container-form" method="post" >
         <label for="username">Username</label>:
         <input id="username" type="text" name="j_username"/>
         <label for="password">Password</label>:
         <input id="password" type="password" name="j_password"/>
-        <input type="submit"/>
+        <input type="submit" action="/login"/>
+
+        <a class="btn success" th:href="@{/signup}">
+            Sign Un
+        </a>
+        <a class="btn danger" th:href="@{/}">
+            Cancel
+        </a>
+
     </form>
 </div>
 </body>
