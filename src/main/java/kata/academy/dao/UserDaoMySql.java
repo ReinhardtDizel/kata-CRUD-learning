@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class UserDaoMySql implements UserDao {
@@ -16,17 +15,16 @@ public class UserDaoMySql implements UserDao {
     private EntityManager em;
 
     @Override
-    public Optional<User> updateUser(UserDto userDto) {
+    public void updateUser(UserDto userDto) {
         User updated = em.find(User.class, userDto.id);
         updated.setName(userDto.getName());
         updated.setEmail(userDto.getEmail());
         em.merge(updated);
-        return Optional.empty();
     }
 
     @Override
-    public Optional<User> getById(long id) {
-        return Optional.ofNullable(em.find(User.class, id));
+    public User getById(long id) {
+        return em.find(User.class, id);
     }
 
     @Override

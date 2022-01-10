@@ -9,30 +9,24 @@
     <a th:href="@{/}">Back</a>
 </div>
 <div>
-    <form th:action="@{/editUser/{params}}" method="post" th:object="${userDto}">
-
-        <tr>
-            <td>
-                <label>
-                    <input type="hidden" th:field="*{id}">
-                </label>
-            </td>
-            <td>
-                <label>
-                    <input type="text" th:field="*{name}">
-                </label>
-            </td>
-            <td>
-                <label>
-                    <input type="text" th:field="*{email}">
-                </label>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" value="edit"/>
-            </td>
-        </tr>
+    <form th:action="@{/edit}" method="post" th:object="${userDto}">
+        <table>
+            <tr>
+                <td><label for="id">Id</label></td>
+                <td><input type="hidden" id="id" th:field="*{id}"/></td>
+            </tr>
+            <tr>
+                <td><label for="name">Name</label></td>
+                <td><input id="name" type="text" th:field="*{name}"></td>
+            </tr>
+            <tr>
+                <td><label for="email">Email</label></td>
+                <td><input id="email" type="text" th:field="*{email}"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="edit"/></td>
+            </tr>
+        </table>
     </form>
 </div>
 </body>

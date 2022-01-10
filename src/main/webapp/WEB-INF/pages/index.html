@@ -9,15 +9,11 @@
         border: 1px solid black;
         padding: 5px;
     }
-
-    .message {
-        color: blue;
-    }
 </style>
 <body>
 
 <div style="border: 1px solid #ccc;padding:5px;margin-bottom:20px;">
-    <a th:href="@{/addUser}">Add user</a>
+    <a th:href="@{/add}">Add user</a>
 </div>
 <div>
     <table style="width:100%">
@@ -34,9 +30,9 @@
             <td th:text="${user.getEmail()}"></td>
             <td>
                 <form action="#"
-                      th:action="@{'delete={id}'(id=${user.getId()})}"
-                      th:method="deleteUser">
-                    <input type="hidden" name="_method" value="deleteUser" />
+                      th:action="@{'/delete/{id}'(id=${user.getId()})}"
+                      th:method="delete">
+                    <input type="hidden" name="_method" value="deleteUser"/>
                     <button name="delete">
                         delete
                     </button>
@@ -44,11 +40,8 @@
                 </form>
             </td>
             <td>
-                <form action="#"
-                      th:action="@{'edit={id}'(id=${user.getId()})}"
-                      th:method="editUser">
-                    <input type="hidden" name="_method" value="editUser" />
-                    <button name="edit">
+                <form th:action="@{'/edit/{id}'(id=${user.getId()})}">
+                    <button>
                         edit
                     </button>
                 </form>
