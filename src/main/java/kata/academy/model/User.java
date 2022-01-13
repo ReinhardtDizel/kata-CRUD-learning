@@ -1,11 +1,17 @@
 package kata.academy.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(schema = "test", name = "user")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,8 +21,8 @@ public class User {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "login", nullable = false)
+    private String login;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -25,33 +31,14 @@ public class User {
     @JoinColumn(name = "user_id")
     private Set<Role> roles = new HashSet<>();
 
-    private Integer active;
-
     public User() {
     }
 
-    public User(String name, String email, String password) {
+    public User(String name, String login, String password, Set<Role> roles) {
         this.name = name;
-        this.email = email;
+        this.login = login;
         this.password = password;
-        active = 1;
-        roles.add(new Role(UserPermissions.USER.getValue()));
-    }
-
-    public User(String name, String email, String password, Role roles) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        active = 1;
-        this.roles.add(roles);
-    }
-
-    public User(String name, String email, String password, Set<Role> roles) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        active = 1;
-        this.roles.addAll(roles);
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -66,16 +53,12 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getLogin() {
+        return login;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public void setPassword(String password) {
@@ -90,36 +73,51 @@ public class User {
         this.roles = roles;
     }
 
-    public Integer getActive() {
-        return active;
-    }
-
-    public void setActive(Integer active) {
-        this.active = active;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
     }
 
     @Override
-    public String toString() {
-        return "UserAbstract{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", active=" + active +
-                ", roles=" + roles +
-                '}';
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
-        User that = (User) o;
-        return id.equals(that.id) && name.equals(that.name) && email.equals(that.email);
+        User user = (User) o;
+        return Objects.equals(id, user.id) && name.equals(user.name) && login.equals(user.login) && password.equals(user.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email);
+        return Objects.hash(id, name, login, password);
     }
 }

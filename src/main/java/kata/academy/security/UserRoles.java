@@ -1,13 +1,13 @@
-package kata.academy.model;
+package kata.academy.security;
 
-public enum UserPermissions {
+public enum UserRoles {
     ADMIN("ROLE_ADMIN"),
     MANAGER("ROLE_MANAGER"),
     USER("ROLE_USER");
 
     private final String value;
 
-    UserPermissions(String value) {
+    UserRoles(String value) {
         this.value = value;
     }
 

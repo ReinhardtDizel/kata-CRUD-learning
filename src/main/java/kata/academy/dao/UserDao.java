@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface UserDao {
 
-    User findUserByUserName(String s);
+    User getUserByLogin(String s);
 
     void updateUser(long id, User user);
 
-    Optional<User> getById(long id);
+    User getById(long id);
 
     List<User> getAll();
 

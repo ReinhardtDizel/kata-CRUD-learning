@@ -10,45 +10,44 @@
 </head>
 <body>
 <div>
+    <!--Навигационная панель с logout-->
     <div class="topnav">
         <a class="active" th:href="@{/}">Home</a>
         <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">Admin Panel</a>
         <div class="login-panel-container">
-            <div sec:authorize="not hasRole('ROLE_ANONYMOUS')">
+            <div sec:authorize="isFullyAuthenticated()">
                 <form class="login-panel-form" action="/logout">
                     <button type="submit">Log out</button>
                 </form>
             </div>
-            <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
+            <div sec:authorize="!isAuthenticated()">
                 <form class="login-panel-form" action="/login">
                     <button type="submit">Sign In</button>
                 </form>
             </div>
         </div>
     </div>
+    <!---------------------------------->
 </div>
 <div class="container">
-    <table class="user-table" sec:authorize="not hasRole('ROLE_ANONYMOUS')">
+    <table class="user-table" sec:authorize="isAuthenticated()">
         <tr>
             <th>name</th>
             <th>email</th>
         </tr>
-        <tr th:each="user: ${users}">
-            <td th:text="${user.getName()}"></td>
-            <td th:text="${user.getEmail()}"></td>
+        <!--/*@thymesVar id="users" type="java.util.List<kata.academy.model.User>"*/-->
+        <tr id="users" th:each="user: ${users}">
+            <!--/*@thymesVar id="name" type="java.lang.String"*/-->
+            <td id="name" th:text="*{name}"></td>
+            <!--/*@thymesVar id="login" type="java.lang.String"*/-->
+            <td id="login" th:text="*{login}"></td>
         </tr>
     </table>
-    <table class="user-table" sec:authorize="hasRole('ROLE_ANONYMOUS')">
+    <table class="user-table" sec:authorize="isAnonymous()">
         <h1>Hello</h1>
         <p>Sign In or Sign Up for enjoy.</p>
         <hr>
     </table>
 </div>
-<canvas id="smile" width="200" height="200">
-    <p>Ваш браузер не поддерживает рисование.</p>
-</canvas>
-<script>
-
-</script>
 </body>
 </html>

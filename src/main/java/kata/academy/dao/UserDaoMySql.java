@@ -1,12 +1,10 @@
 package kata.academy.dao;
 
 import kata.academy.model.User;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class UserDaoMySql implements UserDao {
@@ -15,15 +13,14 @@ public class UserDaoMySql implements UserDao {
     private EntityManager em;
 
     @Override
-    public User findUserByUserName(String s) {
-        Query query = em.createQuery("select user from User user where user.email =:param");
-        query.setParameter("param", s);
-        User exist = null;
+    public User getUserByLogin(String s) {
         try {
-            exist = (User) query.getSingleResult();
+            Query query = em.createQuery("select user from User user where user.login =:param");
+            query.setParameter("param", s);
+            return (User) query.getSingleResult();
         } catch (NoResultException ignored) {
+            return null;
         }
-        return exist;
     }
 
     @Override
@@ -31,17 +28,17 @@ public class UserDaoMySql implements UserDao {
         try {
             User updated = em.find(User.class, id);
             updated.setName(user.getName());
-            updated.setEmail(user.getEmail());
+            updated.setLogin(user.getLogin());
             updated.setRoles(user.getRoles());
             em.merge(updated);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException | TransactionRequiredException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public Optional<User> getById(long id) {
-        return Optional.ofNullable(em.find(User.class, id));
+    public User getById(long id) {
+        return em.find(User.class, id);
     }
 
     @Override
@@ -54,13 +51,13 @@ public class UserDaoMySql implements UserDao {
     public void saveUser(User user) {
         try {
             if (!em.contains(user)) {
-                if (findUserByUserName(user.getEmail()) == null) {
+                if (getUserByLogin(user.getLogin()) == null) {
                     em.persist(user);
                 } else {
                     throw new EntityExistsException();
                 }
             }
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
@@ -70,7 +67,7 @@ public class UserDaoMySql implements UserDao {
         try {
             User deleted = em.find(User.class, id);
             em.remove(deleted);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
