@@ -11,26 +11,27 @@
 </head>
 <body>
 <div>
+    <!--Навигационная панель с logout-->
     <div class="topnav">
-        <a th:href="@{/}">Home</a>
-        <a class="active" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">Admin Panel</a>
-        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/addUser}">Add User</a>
+        <a class="active" th:href="@{/}">Home</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">Admin Panel</a>
         <div class="login-panel-container">
-            <div sec:authorize="not hasRole('ROLE_ANONYMOUS')">
+            <div sec:authorize="isFullyAuthenticated()">
                 <form class="login-panel-form" action="/logout">
                     <button type="submit">Log out</button>
                 </form>
             </div>
-            <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
+            <div sec:authorize="!isAuthenticated()">
                 <form class="login-panel-form" action="/login">
                     <button type="submit">Sign In</button>
                 </form>
             </div>
         </div>
     </div>
+    <!---------------------------------->
 </div>
 <div class="container">
-    <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{/admin/editUser}" method="post" th:object="${userDto}">
+    <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{/admin/editUser}" method="post" th:object="${user}">
         <h2>Edit User Form</h2>
         <div class="row">
             <div class="col-25">
@@ -52,10 +53,10 @@
 
         <div class="row">
             <div class="col-25">
-                <label for="email">User Email</label>
+                <label for="login">User Login</label>
             </div>
             <div class="col-75">
-                <input required type="text" id="email" name="email" placeholder="Email.." th:field="*{email}">
+                <input required type="text" id="login" name="login" placeholder="Login.." th:field="*{login}">
             </div>
         </div>
 
@@ -73,13 +74,12 @@
                 <label>Roles:</label>
             </div>
             <div class="col-75">
-                <th:block th:each="role: ${permissions}">
-                    <input type="checkbox" th:field="*{roles}"
-                           th:text="${role}" th:value="${role}" class="m-2"/>
-                </th:block>
-                <th:block th:each="role: ${permissionsToAdd}">
-                    <input type="checkbox" th:field="*{roles}"
-                           th:text="${role}" th:value="${role}" class="m-2"/>
+                <!--/*@thymesVar id="possible_roles" type="java.util.Set<kata.academy.model.Role>"*/-->
+                <th:block th:each="possible_role: ${possible_roles}">
+                    <!--/*@thymesVar id="possible_role" type="kata.academy.model.Role"*/-->
+                    <!--/*@thymesVar id="roles" type="java.util.Set<kata.academy.model.Role>"*/-->
+                    <input type="checkbox" th:field="*{roles}" th:text="${possible_role}"
+                           th:value="${possible_role}" class="m-2"/>
                 </th:block>
             </div>
         </div>

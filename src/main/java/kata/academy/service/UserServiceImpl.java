@@ -8,15 +8,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     private UserDao userDao;
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Autowired
     public void setUserDao(UserDao userDao) {
@@ -31,13 +34,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(long id) {
-        Optional<User> optionalUser = userDao.getById(id);
-        return optionalUser.orElse(null);
+        return userDao.getById(id);
     }
 
     @Override
-    public User findUserByUserName(String s) {
-        return userDao.findUserByUserName(s);
+    public User getUserByLogin(String s) {
+        return userDao.getUserByLogin(s);
     }
 
     @Override

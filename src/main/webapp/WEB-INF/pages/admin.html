@@ -11,23 +11,25 @@
 </head>
 <body>
 <div>
+    <!--Навигационная панель с logout-->
     <div class="topnav">
         <a th:href="@{/}">Home</a>
         <a class="active" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">Admin Panel</a>
         <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/addUser}">Add User</a>
         <div class="login-panel-container">
-            <div sec:authorize="not hasRole('ROLE_ANONYMOUS')">
+            <div sec:authorize="isFullyAuthenticated()">
                 <form class="login-panel-form" action="/logout">
                     <button type="submit">Log out</button>
                 </form>
             </div>
-            <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
+            <div sec:authorize="!isAuthenticated()">
                 <form class="login-panel-form" action="/login">
                     <button type="submit">Sign In</button>
                 </form>
             </div>
         </div>
     </div>
+    <!---------------------------------->
 </div>
 <div class="container">
     <table sec:authorize="hasRole('ROLE_ADMIN')" class="user-table">
@@ -38,17 +40,18 @@
             <th></th>
             <th></th>
         </tr>
+        <!--/*@thymesVar id="users" type="java.util.List<kata.academy.model.User>"*/-->
         <tr th:each="user: ${users}"  th:with="user_role_name=${@environment.getProperty('user_name')}">
-            <td th:text="${user.getId()}"></td>
-            <td th:text="${user.getName()}"></td>
-            <td th:text="${user.getEmail()}"></td>
-            <td th:text="${user.getRoles()}"></td>
+            <td th:text="*{id}"></td>
+            <td th:text="*{name}"></td>
+            <td th:text="*{login}"></td>
+            <td th:text="*{password}"></td>
             <td>
                 <form action="#"
-                      th:action="@{'admin/delete={id}'(id=${user.getId()})}"
+                      th:action="@{'admin/delete/{id}'(id=${user.getId()})}"
                       th:method="deleteUser">
                     <input type="hidden" name="_method" value="deleteUser"/>
-                    <button th:if="${user.getEmail()}!=${user_role_name}" class="btn danger" name="delete">
+                    <button th:if="${user.getLogin()}!=${user_role_name}" class="btn danger" name="delete">
                         <i class="fa fa-trash">
                         </i>
                         Delete
@@ -58,10 +61,10 @@
             </td>
             <td>
                 <form action="#"
-                      th:action="@{'admin/edit={id}'(id=${user.getId()})}"
+                      th:action="@{'admin/edit/{id}'(id=${user.getId()})}"
                       th:method="editUser">
                     <input type="hidden" name="_method" value="editUser"/>
-                    <button th:if="${user.getEmail()}!=${user_role_name}" class="btn success" name="edit">
+                    <button th:if="${user.getLogin()}!=${user_role_name}" class="btn success" name="edit">
                         edit
                     </button>
                 </form>
