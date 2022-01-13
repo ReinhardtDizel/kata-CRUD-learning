@@ -60,6 +60,12 @@
             <version>${spring.boot.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.6.2</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5 -->
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
@@ -103,34 +109,5 @@
         </dependency>
 
     </dependencies>
-
-    <!--    <build>-->
-    <!--        <pluginManagement>-->
-    <!--            <plugins>-->
-    <!--                <plugin>-->
-    <!--                    <groupId>org.apache.maven.plugins</groupId>-->
-    <!--                    <artifactId>maven-war-plugin</artifactId>-->
-    <!--                    <version>2.4</version>-->
-    <!--                    <configuration>-->
-    <!--                        <warSourceDirectory>src/webapp</warSourceDirectory>-->
-    <!--                        <warName>spring_security</warName>-->
-    <!--                        <failOnMissingWebXml>false</failOnMissingWebXml>-->
-    <!--                    </configuration>-->
-    <!--                </plugin>-->
-    <!--            </plugins>-->
-    <!--        </pluginManagement>-->
-    <!--        <plugins>-->
-    <!--            <plugin>-->
-    <!--                <groupId>org.apache.maven.plugins</groupId>-->
-    <!--                <artifactId>maven-compiler-plugin</artifactId>-->
-    <!--                <version>3.8.1</version>-->
-    <!--                <configuration>-->
-    <!--                    <source>1.8</source>-->
-    <!--                    <target>1.8</target>-->
-    <!--                </configuration>-->
-    <!--            </plugin>-->
-    <!--        </plugins>-->
-    <!--        <finalName>Spring_Security</finalName>-->
-    <!--    </build>-->
 
 </project>

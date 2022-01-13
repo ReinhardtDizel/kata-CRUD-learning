@@ -41,7 +41,7 @@
             <th></th>
         </tr>
         <!--/*@thymesVar id="users" type="java.util.List<kata.academy.model.User>"*/-->
-        <tr th:each="user: ${users}"  th:with="user_role_name=${@environment.getProperty('user_name')}">
+        <tr th:each="user: ${users}"  th:with="app_admin_role=${@environment.getProperty('app_admin_role')}">
             <td th:text="*{id}"></td>
             <td th:text="*{name}"></td>
             <td th:text="*{login}"></td>
@@ -51,7 +51,7 @@
                       th:action="@{'admin/delete/{id}'(id=${user.getId()})}"
                       th:method="deleteUser">
                     <input type="hidden" name="_method" value="deleteUser"/>
-                    <button th:if="${user.getLogin()}!=${user_role_name}" class="btn danger" name="delete">
+                    <button th:if="${user.getLogin()}==${app_admin_role}" class="btn danger" name="delete">
                         <i class="fa fa-trash">
                         </i>
                         Delete
@@ -64,7 +64,7 @@
                       th:action="@{'admin/edit/{id}'(id=${user.getId()})}"
                       th:method="editUser">
                     <input type="hidden" name="_method" value="editUser"/>
-                    <button th:if="${user.getLogin()}!=${user_role_name}" class="btn success" name="edit">
+                    <button th:if="${user.getLogin()}!=${app_admin_role}" class="btn success" name="edit">
                         edit
                     </button>
                 </form>

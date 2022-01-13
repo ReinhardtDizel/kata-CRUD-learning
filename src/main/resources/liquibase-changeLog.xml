@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+    http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd "
+        changeLogId="18de6cde-a117-4b70-a21f-992c9141b5c3">
+
+    <property name="app_admin_name" value="" file="liquibase.properties"/>
+    <property name="app_admin_login" value="" file="liquibase.properties"/>
+    <property name="app_admin_password" value="" file="liquibase.properties"/>
+    <property name="app_admin_role" value="" file="liquibase.properties"/>
+    <property name="app_user_role" value="" file="liquibase.properties"/>
+
+    <changeSet id="set_1.000" author="dizel">
+        <createTable schemaName="test" tableName="user">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar2(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="login" type="varchar2(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar2(255)"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="user"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="set_1.001" author="dizel">
+        <createTable schemaName="test" tableName="role">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar2(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="role"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="set_1.002" author="dizel">
+        <createTable tableName="user_role">
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="fk001user_id"
+                             references="user(id)"
+                             nullable="false"
+                             deleteCascade="true"
+                />
+            </column>
+            <column name="roles_id" type="bigint">
+                <constraints foreignKeyName="fk001roles_id"
+                             references="role(id)"
+                             nullable="false"
+                             deleteCascade="true"
+                />
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="user_role"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="insert_1.001" author="dizel">
+        <insert tableName="user">
+            <column name="id" type="bigint" value="1"/>
+            <column name="name" value="${app_admin_name}"/>
+            <column name="login" value="${app_admin_login}"/>
+            <column name="password" value="${app_admin_password}"/>
+        </insert>
+        <insert tableName="role">
+            <column name="id" type="bigint" value="1"/>
+            <column name="name" value="${app_admin_role}"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="user_id" type="bigint" value="1"/>
+            <column name="roles_id" type="bigint" value="1"/>
+        </insert>
+        <insert tableName="role">
+            <column name="id" type="bigint" value="2"/>
+            <column name="name" value="${app_user_role}"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="user_id" type="bigint" value="1"/>
+            <column name="roles_id" type="bigint" value="2"/>
+        </insert>
+        <rollback>
+            <delete schemaName="test" tableName="user_role">
+            </delete>
+            <delete schemaName="test" tableName="role">
+            </delete>
+            <delete schemaName="test" tableName="user">
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

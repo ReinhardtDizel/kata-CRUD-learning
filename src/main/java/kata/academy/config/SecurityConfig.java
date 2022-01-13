@@ -2,15 +2,11 @@ package kata.academy.config;
 
 import kata.academy.config.handler.CustomAuthenticationFailureHandler;
 import kata.academy.config.handler.LoginSuccessHandler;
-import kata.academy.config.init.TablesStartInitializer;
-import kata.academy.dao.UserDao;
 import kata.academy.security.UserSecurityDetailsService;
-import kata.academy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,21 +23,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserSecurityDetailsService securityDetailsService;
-
-    private Environment environment;
-
-    private UserService userService;
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
-    }
-
 
     @Autowired
     public void setSecurityDetailsService(UserSecurityDetailsService securityDetailsService) {
@@ -110,26 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public void TablesStartInitializer() {
-        TablesStartInitializer tablesStartInitializer = new TablesStartInitializer();
-        try {
-            tablesStartInitializer.setUserDao(userService);
-            tablesStartInitializer.setAdminPassword(environment.getRequiredProperty("app_admin_password"));
-            tablesStartInitializer.setAdminName(environment.getRequiredProperty("app_admin_name"));
-            tablesStartInitializer.setAdminLogin(environment.getRequiredProperty("app_admin_login"));
-            tablesStartInitializer.setAdminRole(environment.getRequiredProperty("app_admin_role"));
-            tablesStartInitializer.setUserRole(environment.getRequiredProperty("app_user_role"));
-            tablesStartInitializer.init();
-        } catch (IllegalStateException exception) {
-            exception.printStackTrace();
-        }
-    }
-
-
-    @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
-
-
 }

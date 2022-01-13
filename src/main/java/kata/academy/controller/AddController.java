@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -36,14 +37,19 @@ public class AddController {
     public String add(Model model) {
         User user = new User();
         List<Role> roles = roleService.getAll();
+        List<Long> newRole = new ArrayList<>();
         model.addAttribute("user", user);
         model.addAttribute("possible_roles", roles);
+        model.addAttribute("roles", newRole);
         return "addUser";
     }
 
     @PostMapping
-    public String save(@ModelAttribute("user") User user) {
-        userService.saveUser(user);
+    public String save(
+            @ModelAttribute("user") User user,
+            @ModelAttribute("roles") List<Long> roles) {
+        System.out.printf("\n=========================%s ==========================\n", roles);
+        //userService.saveUser(user);
         return "redirect:/";
     }
 
