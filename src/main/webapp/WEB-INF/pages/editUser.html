@@ -31,7 +31,7 @@
     <!---------------------------------->
 </div>
 <div class="container">
-    <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{/admin/editUser}" method="post" th:object="${user}">
+    <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{/user/edit}" method="post" th:object="${user}">
         <h2>Edit User Form</h2>
         <div class="row">
             <div class="col-25">

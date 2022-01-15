@@ -15,7 +15,7 @@
     <div class="topnav">
         <a th:href="@{/}">Home</a>
         <a class="active" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">Admin Panel</a>
-        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/addUser}">Add User</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/user/create}">Add User</a>
         <div class="login-panel-container">
             <div sec:authorize="isFullyAuthenticated()">
                 <form class="login-panel-form" action="/logout">
@@ -48,7 +48,7 @@
             <td th:text="*{password}"></td>
             <td>
                 <form action="#"
-                      th:action="@{'admin/delete/{id}'(id=${user.getId()})}"
+                      th:action="@{'user/delete/{id}'(id=${user.getId()})}"
                       th:method="deleteUser">
                     <input type="hidden" name="_method" value="deleteUser"/>
                     <button th:if="${user.getLogin()}==${app_admin_role}" class="btn danger" name="delete">
@@ -61,7 +61,7 @@
             </td>
             <td>
                 <form action="#"
-                      th:action="@{'admin/edit/{id}'(id=${user.getId()})}"
+                      th:action="@{'user/edit/{id}'(id=${user.getId()})}"
                       th:method="editUser">
                     <input type="hidden" name="_method" value="editUser"/>
                     <button th:if="${user.getLogin()}!=${app_admin_role}" class="btn success" name="edit">

@@ -27,6 +27,17 @@ public class RoleDaoMySql implements RoleDao {
     }
 
     @Override
+    public Role getById(Long id) {
+        try {
+            Query query = em.createQuery("select role from Role role where role.id =:param");
+            query.setParameter("param", id);
+            return (Role) query.getSingleResult();
+        } catch (NoResultException ignored) {
+            return null;
+        }
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public List<Role> getAll() {
         return em.createQuery("select role from Role role").getResultList();

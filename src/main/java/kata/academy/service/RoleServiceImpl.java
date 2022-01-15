@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,6 +27,15 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> getAll() {
         return roleDao.getAll();
+    }
+
+    @Override
+    public List<Role> getRoleById(List<Long> roles) {
+        List<Role> result = new ArrayList<>();
+        for (Long id : roles) {
+            result.add(roleDao.getById(id));
+        }
+        return result;
     }
 
     @Override
