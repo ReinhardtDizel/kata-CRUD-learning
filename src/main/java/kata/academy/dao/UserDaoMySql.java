@@ -53,11 +53,7 @@ public class UserDaoMySql implements UserDao {
     @Override
     public void saveUser(User user) {
         try {
-            if (getUserByLogin(user.getLogin()) == null) {
-                em.persist(user);
-            } else {
-                throw new EntityExistsException();
-            }
+            em.persist(user);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }

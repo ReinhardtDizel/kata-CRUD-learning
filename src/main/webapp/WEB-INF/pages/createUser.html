@@ -32,7 +32,8 @@
     <!---------------------------------->
 </div>
 <div class="container">
-    <form sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{/user/create}" method="post" th:object="${user}">
+    <form id="create_form" sec:authorize="hasRole('ROLE_ADMIN')" th:action="@{/user/create}" method="post"
+          th:object="${user}">
         <h2>Add new User Form</h2>
         <div class="row">
             <div class="col-25">
@@ -46,7 +47,7 @@
 
         <div class="row">
             <div class="col-25">
-                <label for="login">User Login</label>
+                <label for="login">User Login&nbsp;<b class="login_error" th:text="${error}"></b></label>
             </div>
             <div class="col-75">
                 <input required type="text" id="login" name="login" placeholder="Login.." th:field="*{login}"
@@ -73,9 +74,10 @@
                 <th:block th:each="possible_role: ${possible_roles}">
                     <!--/*@thymesVar id="possible_role" type="kata.academy.model.Role"*/-->
                     <!--/*@thymesVar id="roles" type="java.util.Set<kata.academy.model.Role>"*/-->
-                    <input type="checkbox" th:field="*{roles}" th:text="${possible_role.getName()}"
-                           th:value="${possible_role.getId()}" class="m-2"/>
+                    <input id="role_checkbox" type="checkbox" th:field="*{roles}" th:text="${possible_role.getName()}"
+                           th:value="${possible_role.getId()}" class="m-2" onclick="roleSelect(this)"/>
                 </th:block>
+                <label for="role_checkbox">&nbsp;<b class="role_checkbox_error" id="role_checkbox_error"></b></label>
             </div>
         </div>
 
@@ -85,10 +87,25 @@
         </div>
 
         <div class="row">
-            <input type="submit" value="Submit">
+            <input id="submit" type="submit" value="Submit" onclick="checkRoleSelect(this)">
         </div>
-
     </form>
 </div>
+<script>
+    let hasRole = false;
+
+    function roleSelect(role) {
+        hasRole = role.checked;
+    }
+
+    function checkRoleSelect() {
+        if (hasRole) {
+            document.getElementById("role_checkbox_error").textContent = "";
+        } else {
+            this.event.preventDefault();
+            document.getElementById("role_checkbox_error").textContent = "Выберите роль";
+        }
+    }
+</script>
 </body>
 </html>

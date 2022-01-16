@@ -36,6 +36,13 @@ public class UserDto {
         this.roles = List.of(roles);
     }
 
+    public UserDto(Long id, String name, String login, String password) {
+        this.id = id;
+        this.name = name;
+        this.login = login;
+        this.password = password;
+    }
+
     public Long getId() {
         return id;
     }
