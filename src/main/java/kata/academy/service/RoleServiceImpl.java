@@ -4,7 +4,6 @@ import kata.academy.dao.RoleDao;
 import kata.academy.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +35,5 @@ public class RoleServiceImpl implements RoleService {
             result.add(roleDao.getById(id));
         }
         return result;
-    }
-
-    @Override
-    @Transactional
-    public void save(Role role) {
-        roleDao.save(role);
     }
 }

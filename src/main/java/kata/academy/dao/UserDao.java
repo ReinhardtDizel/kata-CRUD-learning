@@ -5,7 +5,6 @@ import kata.academy.model.Role;
 import kata.academy.model.User;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserDao {
 

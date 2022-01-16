@@ -1,7 +1,6 @@
 package kata.academy.config.handler;
 
 import kata.academy.model.User;
-import kata.academy.security.UserRoles;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                                         Authentication authentication) throws IOException, ServletException {
 
         User userDetails = (User) authentication.getPrincipal();
-        if (userDetails.getAuthorities().stream().anyMatch(s -> s.getAuthority().equals(UserRoles.ADMIN.getValue()))) {
+        if (userDetails.getAuthorities().stream().anyMatch(s -> s.getAuthority().equals("ROLE_ADMIN"))) {
             httpServletResponse.sendRedirect("/admin");
         } else {
             httpServletResponse.sendRedirect("/");

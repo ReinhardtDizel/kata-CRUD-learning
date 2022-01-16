@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityExistsException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -37,11 +36,13 @@ public class UserServiceImpl implements UserService {
     public void updateUser(UserDto user, List<Role> roles) {
         if (getUserByLogin(user.getLogin()) != null) {
             if (Objects.equals(getUserByLogin(user.getLogin()).getId(), user.getId())) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
                 userDao.updateUser(user, roles);
             } else {
                 throw new UserAlreadyExist();
             }
         } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userDao.updateUser(user, roles);
         }
     }
@@ -59,13 +60,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return userDao.getAll();
-    }
-
-    @Override
-    @Transactional
-    public void saveUserWithNewRole(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userDao.saveUser(user);
     }
 
     @Override
