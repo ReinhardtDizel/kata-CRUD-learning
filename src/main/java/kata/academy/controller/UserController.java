@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/user")
@@ -42,9 +41,11 @@ public class UserController {
     @PostMapping("/create")
     public String create(
             @ModelAttribute("user") UserDto user) {
-        Set<Role> roleSet = new HashSet<>(roleService.getRoleById(user.getRoles()));
-        User createdUser = new User(user.getName(), user.getLogin(), user.getPassword(), roleSet);
-        userService.saveUser(createdUser);
+        User createdUser = new User();
+        createdUser.setName(user.getName());
+        createdUser.setLogin(user.getLogin());
+        createdUser.setPassword(user.getPassword());
+        userService.saveUser(createdUser, roleService.getRoleById(user.getRoles()));
         return "redirect:/";
     }
 
@@ -58,15 +59,15 @@ public class UserController {
     }
 
     @PostMapping("/edit")
-    public String edit(Model model, @ModelAttribute("userDto") User user) {
-        userService.updateUser(user.getId(), user);
+    public String edit(Model model, @ModelAttribute("userDto") UserDto user) {
+        userService.updateUser(user, roleService.getRoleById(user.getRoles()));
         return "redirect:/";
     }
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         userService.deleteUser(id);
-        return "redirect:index";
+        return "redirect:/";
     }
 
 }

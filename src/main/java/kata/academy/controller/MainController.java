@@ -21,7 +21,7 @@ public class MainController {
     @GetMapping
     public String hello(Model model) {
 
-        model.addAttribute(userService.getAll());
+        model.addAttribute("users", userService.getAll());
         return "index";
     }
 }

@@ -41,17 +41,22 @@
             <th></th>
         </tr>
         <!--/*@thymesVar id="users" type="java.util.List<kata.academy.model.User>"*/-->
-        <tr th:each="user: ${users}"  th:with="app_admin_role=${@environment.getProperty('app_admin_role')}">
-            <td th:text="*{id}"></td>
-            <td th:text="*{name}"></td>
-            <td th:text="*{login}"></td>
-            <td th:text="*{password}"></td>
+        <tr th:each="user: ${users}">
+            <!--/*@thymesVar id="id" type="java.lang.Long"*/-->
+            <td th:text="${user.id}"></td>
+            <!--/*@thymesVar id="name" type="java.lang.String"*/-->
+            <td th:text="${user.name}"></td>
+            <!--/*@thymesVar id="login" type="java.lang.String"*/-->
+            <td th:text="${user.login}"></td>
+            <!--/*@thymesVar id="password" type="java.lang.String"*/-->
+            <td th:text="${user.password}"></td>
+            <!--/*@thymesVar id="login" type="java.util.Set<kata.academy.model.Role>"*/-->
+            <td th:text="${user.roles}"></td>
             <td>
                 <form action="#"
                       th:action="@{'user/delete/{id}'(id=${user.getId()})}"
                       th:method="deleteUser">
-                    <input type="hidden" name="_method" value="deleteUser"/>
-                    <button th:if="${user.getLogin()}==${app_admin_role}" class="btn danger" name="delete">
+                    <button class="btn danger" name="delete">
                         <i class="fa fa-trash">
                         </i>
                         Delete
@@ -60,14 +65,11 @@
                 </form>
             </td>
             <td>
-                <form action="#"
-                      th:action="@{'user/edit/{id}'(id=${user.getId()})}"
-                      th:method="editUser">
-                    <input type="hidden" name="_method" value="editUser"/>
-                    <button th:if="${user.getLogin()}!=${app_admin_role}" class="btn success" name="edit">
+                <a th:href="@{user/edit/{id}(id=${user.getId()})}">
+                    <button class="btn success" name="edit">
                         edit
                     </button>
-                </form>
+                </a>
             </td>
         </tr>
     </table>

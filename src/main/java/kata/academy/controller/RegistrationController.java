@@ -1,5 +1,6 @@
 package kata.academy.controller;
 
+import kata.academy.dto.UserDto;
 import kata.academy.model.User;
 import kata.academy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,14 @@ public class RegistrationController {
     @GetMapping
     public String save(Model model) {
 
+        model.addAttribute("user", new UserDto());
         return "signup";
     }
 
     @PostMapping
     public String save(@ModelAttribute("user") User user) {
 
-        userService.saveUser(user);
+        userService.saveUserWithNewRole(user);
         return "redirect:index";
     }
 }

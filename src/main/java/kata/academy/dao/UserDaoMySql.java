@@ -1,9 +1,12 @@
 package kata.academy.dao;
 
+import kata.academy.dto.UserDto;
+import kata.academy.model.Role;
 import kata.academy.model.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 
 @Repository
@@ -24,12 +27,12 @@ public class UserDaoMySql implements UserDao {
     }
 
     @Override
-    public void updateUser(long id, User user) {
+    public void updateUser(UserDto user, List<Role> roles) {
         try {
-            User updated = em.find(User.class, id);
+            User updated = em.find(User.class, user.getId());
             updated.setName(user.getName());
             updated.setLogin(user.getLogin());
-            updated.setRoles(user.getRoles());
+            updated.setRoles(new HashSet<>(roles));
             em.merge(updated);
         } catch (IllegalArgumentException | TransactionRequiredException e) {
             e.printStackTrace();
@@ -50,12 +53,10 @@ public class UserDaoMySql implements UserDao {
     @Override
     public void saveUser(User user) {
         try {
-            if (!em.contains(user)) {
-                if (getUserByLogin(user.getLogin()) == null) {
-                    em.persist(user);
-                } else {
-                    throw new EntityExistsException();
-                }
+            if (getUserByLogin(user.getLogin()) == null) {
+                em.persist(user);
+            } else {
+                throw new EntityExistsException();
             }
         } catch (IllegalArgumentException e) {
             e.printStackTrace();

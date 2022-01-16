@@ -78,8 +78,8 @@
                 <th:block th:each="possible_role: ${possible_roles}">
                     <!--/*@thymesVar id="possible_role" type="kata.academy.model.Role"*/-->
                     <!--/*@thymesVar id="roles" type="java.util.Set<kata.academy.model.Role>"*/-->
-                    <input type="checkbox" th:field="*{roles}" th:text="${possible_role}"
-                           th:value="${possible_role}" class="m-2"/>
+                    <input type="checkbox" th:field="*{roles}" th:text="${possible_role.getName()}"
+                           th:value="${possible_role.getId()}" class="m-2"/>
                 </th:block>
             </div>
         </div>

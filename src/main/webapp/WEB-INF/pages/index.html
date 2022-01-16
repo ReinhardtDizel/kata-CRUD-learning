@@ -38,9 +38,11 @@
         <!--/*@thymesVar id="users" type="java.util.List<kata.academy.model.User>"*/-->
         <tr id="users" th:each="user: ${users}">
             <!--/*@thymesVar id="name" type="java.lang.String"*/-->
-            <td id="name" th:text="*{name}"></td>
+            <td th:text="${user.name}"></td>
             <!--/*@thymesVar id="login" type="java.lang.String"*/-->
-            <td id="login" th:text="*{login}"></td>
+            <td th:text="${user.login}"></td>
+            <!--/*@thymesVar id="login" type="java.util.Set<kata.academy.model.Role>"*/-->
+            <td th:text="${user.roles}"></td>
         </tr>
     </table>
     <table class="user-table" sec:authorize="isAnonymous()">

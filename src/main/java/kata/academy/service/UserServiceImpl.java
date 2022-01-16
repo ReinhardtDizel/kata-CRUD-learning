@@ -1,12 +1,15 @@
 package kata.academy.service;
 
 import kata.academy.dao.UserDao;
+import kata.academy.dto.UserDto;
+import kata.academy.model.Role;
 import kata.academy.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -28,8 +31,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(long id, User user) {
-        userDao.updateUser(id, user);
+    public void updateUser(UserDto user, List<Role> roles) {
+        userDao.updateUser(user, roles);
     }
 
     @Override
@@ -49,9 +52,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void saveUser(User user) {
+    public void saveUserWithNewRole(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.saveUser(user);
+    }
+
+    @Override
+    @Transactional
+    public void saveUser(User user, List<Role> roles) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userDao.saveUser(user);
+        getUserByLogin(user.getLogin()).setRoles(new HashSet<>(roles));
     }
 
     @Override

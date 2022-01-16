@@ -48,6 +48,7 @@
                              foreignKeyName="fk001user_id"
                              references="user(id)"
                              nullable="false"
+                             deleteCascade="true"
                 />
             </column>
             <column name="roles_id" type="bigint">
@@ -55,6 +56,7 @@
                              foreignKeyName="fk002roles_id"
                              references="role(id)"
                              nullable="false"
+                             deleteCascade="true"
                 />
             </column>
         </createTable>
