@@ -1,12 +1,14 @@
 package kata.academy.service;
 
+import kata.academy.dto.UserDto;
+import kata.academy.model.Role;
 import kata.academy.model.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    void updateUser(long id, User user);
+    void updateUser(UserDto user, List<Role> roles);
 
     User getById(long id);
 
@@ -14,7 +16,9 @@ public interface UserService {
 
     List<User> getAll();
 
-    void saveUser(User user);
+    void saveUserWithNewRole(User user);
+
+    void saveUser(User user, List<Role> roles);
 
     void deleteUser(long id);
 }

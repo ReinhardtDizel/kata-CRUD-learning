@@ -4,10 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(schema = "test", name = "user")
@@ -27,20 +24,14 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+            inverseJoinColumns = @JoinColumn(name = "roles_id"))
+
     private Set<Role> roles = new HashSet<>();
 
     public User() {
-    }
-
-    public User(String name, String login, String password, Set<Role> roles) {
-        this.name = name;
-        this.login = login;
-        this.password = password;
-        this.roles = roles;
     }
 
     public Long getId() {
@@ -63,10 +54,6 @@ public class User implements UserDetails {
         this.login = login;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
@@ -83,6 +70,10 @@ public class User implements UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
@@ -121,5 +112,16 @@ public class User implements UserDetails {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, login, password);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

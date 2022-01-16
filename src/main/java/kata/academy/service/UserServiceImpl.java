@@ -1,13 +1,19 @@
 package kata.academy.service;
 
 import kata.academy.dao.UserDao;
+import kata.academy.dto.UserDto;
+import kata.academy.exception.UserAlreadyExist;
+import kata.academy.model.Role;
 import kata.academy.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityExistsException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,8 +34,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(long id, User user) {
-        userDao.updateUser(id, user);
+    public void updateUser(UserDto user, List<Role> roles) {
+        if (getUserByLogin(user.getLogin()) != null) {
+            if (Objects.equals(getUserByLogin(user.getLogin()).getId(), user.getId())) {
+                userDao.updateUser(user, roles);
+            } else {
+                throw new UserAlreadyExist();
+            }
+        } else {
+            userDao.updateUser(user, roles);
+        }
     }
 
     @Override
@@ -49,9 +63,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void saveUser(User user) {
+    public void saveUserWithNewRole(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.saveUser(user);
+    }
+
+    @Override
+    @Transactional
+    public void saveUser(User user, List<Role> roles) {
+        if (getUserByLogin(user.getLogin()) == null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userDao.saveUser(user);
+            getUserByLogin(user.getLogin()).setRoles(new HashSet<>(roles));
+        } else {
+            throw new UserAlreadyExist();
+        }
     }
 
     @Override
